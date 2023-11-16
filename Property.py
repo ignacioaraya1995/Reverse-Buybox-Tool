@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from utils import *
 from fuzzywuzzy import fuzz
 
+MONTHS = 18
 
 # Defining the Property class with all the attributes
 class Property:
@@ -405,11 +406,11 @@ class Property:
             return False
         
         # Months since PrevSale <= 12 and VALID
-        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > 12.1 or self.n_prevSaleValid != "Y":
+        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y":
             return False
         
         # Months since CurrentSale <= 12 and VALID
-        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > 12.1 or self.n_prevSaleValid != "Y":
+        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y":
             return False
         
         # Years since built > 3
@@ -440,11 +441,11 @@ class Property:
             return False
         
         # Months since PrevSale <= 12 and VALID
-        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > 12.1 or self.n_prevSaleValid != "Y":
+        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y":
             return False
 
         # Months since CurrentSale <= 12 and VALID
-        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > 12.1 or self.n_prevSaleValid != "Y":
+        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y":
             return False
 
         # Years since built > 3
@@ -475,11 +476,11 @@ class Property:
             return False
         
         # Months since PrevSale <= 12 and VALID
-        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > 12.1 or self.n_prevSaleValid != "Y":
+        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y":
             return False
 
         # Months since CurrentSale <= 12 and VALID
-        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > 12.1 or self.n_prevSaleValid != "Y":
+        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y":
             return False
 
         # Years since built > 5

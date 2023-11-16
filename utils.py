@@ -268,9 +268,6 @@ def display_fips_info(fips_list, fips_codes):
     return str(table)
 
 def print_fips_summary(file_path, fips_instances):
-    import csv
-    import pandas as pd
-
     # Create a mapping of FIPS code to county name from the list of FIPS instances
     fips_to_county = {str(instance.fips_code): instance.county_name for instance in fips_instances}
 
@@ -467,6 +464,7 @@ def export_cases(properties_list, RBB = False):
     # Count of exported rows (excluding header)
     exported_properties = len(properties_list)
     exported_deals = len(df[df['Deal'] == 1])
+    print("Exported deals: {} from {} properties".format(exported_deals, exported_properties))
 
 def read_cases(RBB):
     if RBB == False:

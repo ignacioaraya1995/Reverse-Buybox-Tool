@@ -8,6 +8,7 @@ if __name__ == "__main__":
     file_input = consolidate_csvs()
     process_csv_file(file_input)
     properties_list = load_properties_from_csv(file_input, RBB)    
+    count_failed_criteria(properties_list)
     export_cases(properties_list, RBB)
     create_tables(properties_list, RBB)
     
