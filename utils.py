@@ -14,6 +14,8 @@ import glob
 from vars import *
 from math import isnan
 from pathlib import Path
+from openpyxl import Workbook
+from collections import Counter
 
 def to_int(value):
     try:
@@ -35,7 +37,7 @@ def load_fips_from_csv():
     fips_list = [Fips(row['FIPS Code'], capitalize_first(row['County Name']), row['Postal State'], row['Code']) for _, row in df.iterrows()]
     return fips_list
 
-def consolidate_csvs():
+def consolidate_csvs(CLIENT_NAME):
     # Define the path to the folder
     folder_path = os.path.join("input", CLIENT_NAME)
     
@@ -67,7 +69,7 @@ def consolidate_csvs():
     print("Files consolidated successfully!")
     return file_name
 
-def process_csv_file(file_path):
+def process_csv_file(CLIENT_NAME, file_path, filter = True):
     # Load the CSV file into a DataFrame
     df = pd.read_csv(file_path)
 
@@ -90,8 +92,9 @@ def process_csv_file(file_path):
     # 2. Convert all columns to string type
     df = df.astype(str)
 
-    # 3. Filter out rows where SitusFullStreetAddress and SitusZIP5 are blank
-    df = df[(df["SitusFullStreetAddress"] != "") & (df["SitusZIP5"] != "")]
+    if filter:
+        # 3. Filter out rows where SitusFullStreetAddress and SitusZIP5 are blank
+        df = df[(df["SitusFullStreetAddress"] != "") & (df["SitusZIP5"] != "")]
 
     # 4. Filter rows based on Use_Type containing either "SFH" or "Townhouse" or "2-9 units"
     df = df[df["Use_Type"].str.contains("SFH|Townhouse|2-9 units")]
@@ -101,7 +104,7 @@ def process_csv_file(file_path):
 
     print("Processing complete. The CSV file has been updated.")
 
-def load_properties_from_csv(file_path, RBB = False):
+def load_properties_from_csv(CLIENT_NAME, file_path, RBB = False):
     fips_list, docType_list, zip_code_dict = load_data()
     if RBB == False:
         with open(file_path, 'r', encoding='utf-8-sig') as file:
@@ -439,7 +442,7 @@ def count_failed_criteria(property_instances):
     # Display the table
     print(x)
     
-def export_cases(properties_list, RBB = False):
+def export_cases(CLIENT_NAME, properties_list, RBB = False):
     if RBB:
         file_cases = "output/RBB_cases - " + CLIENT_NAME  # Notice the .xlsx is removed
     else:
@@ -486,7 +489,7 @@ def create_cases_table(file_path, RBB = False):
         "n_lotSizeSqFt", "n_monthsSincePrevSale", "n_prevDaysOwnership",
         "n_totalValue", "n_yearsSinceBuilt", "Owner_Type", "OwnerNAME1FULL",
         "PropertyID", "saleDate", "SitusCity", "SitusFullStreetAddress",
-        "SitusState", "SitusZIP5", "SumLivingAreaSqFt", "totalValue", "Use_Type", 'Deal']
+        "SitusState", "SitusZIP5", "SumLivingAreaSqFt", "totalValue", "Use_Type", 'Deal', 'CurrentSalesPrice']
 
     # Official list
     official_columns = [
@@ -504,7 +507,12 @@ def create_cases_table(file_path, RBB = False):
         'case_1',
         'case_2',
         'case_3',
-        'Deal'
+        'Deal',
+        'CurrentSalesPrice',
+        'PropertyID',
+        'SitusState',
+        'FIPS'
+        
     ]
 
     # Find missing variables
@@ -546,11 +554,11 @@ def create_cases_table(file_path, RBB = False):
     
     # Columns to be deleted before exporting
     cols_to_delete = [
-        'Deal', 'FIPS', 'LotSizeSqFt', 'LTV', 'MailingCity', 
+        'Deal', 'LotSizeSqFt', 'LTV', 'MailingCity', 
         'MailingFullStreetAddress', 'MailingState', 'MailingZIP5',
         'n_currentSaleSellerROI', 'n_discounted', 'n_dSPtV', 'n_monthsSincePrevSale',
         'n_prevDaysOwnership', 'n_yearsSinceBuilt', 'Owner_Type', 'OwnerNAME1FULL',
-        'PropertyID', 'SitusCity', 'SitusState', 'SumLivingAreaSqFt', 'totalValue'
+        'SitusCity', 'SumLivingAreaSqFt', 'totalValue'
     ]
     
     # Drop the columns
@@ -706,13 +714,19 @@ def create_zipcode_table(properties_list, file_path):
     df = df[df['ZipCode'].notna() & ~df['ZipCode'].isin([np.inf, -np.inf])]
 
     # Convert ZipCode to string, handle NaN or inf, and transform '.0' to float
-    df['ZipCode'] = df['ZipCode'].fillna(0).astype(float)
+    try:
+        df['ZipCode'] = df['ZipCode'].fillna(0).astype(float)
+    except:
+        pass
 
     # Filter out rows with NaN values in 'ZipCode' column
     df = df[df['ZipCode'].notna()]
 
     # Convert ZipCode to integer and then to string
-    df['ZipCode'] = df['ZipCode'].astype(int).astype(str).str.zfill(5)
+    try:
+        df['ZipCode'] = df['ZipCode'].astype(int).astype(str).str.zfill(5)
+    except:
+        pass
     
     # Replace '00nan' with 'Unknown'
     df['ZipCode'] = df['ZipCode'].replace('00nan', 'Unknown')
@@ -981,7 +995,7 @@ def ensure_file_exists(file_path):
             df_empty.to_excel(writer, sheet_name='Init', index=False)
         print(f"'{file_path}' has been created.")  
 
-def delete_csv_files(directory='output'):
+def delete_csv_files(CLIENT_NAME, directory='output'):
     # Get list of all .csv files in the specified directory
     csv_files = glob.glob(os.path.join(directory, '*.csv'))
     
@@ -1001,7 +1015,7 @@ def delete_csv_files(directory='output'):
         pass
         # print(f"The file '{file_name}' does not exist.")
           
-def create_tables(properties_list, RBB = False):
+def create_tables(CLIENT_NAME, properties_list, RBB = False):
     if RBB == True:
         file_path   = "output/RBB_results - "  + CLIENT_NAME + ".xlsx"
     if RBB == False:
@@ -1013,7 +1027,7 @@ def create_tables(properties_list, RBB = False):
     create_living_area_table(properties_list, file_path)    
     create_lot_size_table(properties_list, file_path)    
     create_cases_table(file_path, RBB)    
-    delete_csv_files()
+    delete_csv_files(CLIENT_NAME)
 
 def find_unmatched_properties(large_file_path, zip_code_dict):
     small_file_path = f"input/{CLIENT_NAME}/client deals/{CLIENT_NAME} - client_deals.xlsx"
@@ -1057,3 +1071,100 @@ def find_unmatched_properties(large_file_path, zip_code_dict):
     columns_to_output = ['Property Address', 'Property ZIP', 'Profit', 'County']
     unmatched_properties = unmatched_df[columns_to_output]
     unmatched_properties.to_excel(f"output/unmatched client_deals - {CLIENT_NAME}.xlsx", index=False)
+      
+def create_dataframe(properties_list):
+    data = []
+    for property in properties_list:
+        entry = {}
+        
+        # MailingFullStreetAddress
+        if str(property.MailingFullStreetAddress).lower() not in ['nan', 'null']:
+            entry['MailingFullStreetAddress'] = str(property.MailingFullStreetAddress)
+        
+        # MailingZIP5
+        try:
+            entry['MailingZIP5'] = str(int(float(property.MailingZIP5))) if property.MailingZIP5 else ''
+        except ValueError:
+            entry['MailingZIP5'] = ''
+            
+         # Include OwnerNAME1FULL
+        entry['OwnerNAME1FULL'] = str(property.OwnerNAME1FULL) if property.OwnerNAME1FULL else ''
+
+        # Handling other fields with a common pattern
+        fields = [
+            ('SumLivingAreaSqFt', property.SumLivingAreaSqFt),
+            ('TotalValue', property.n_totalValue),
+            ('LivingAreaSqFt', property.n_livingAreaSqFt),
+            ('LotSizeSqFt', property.n_lotSizeSqFt),
+            ('YearsSinceBuilt', property.n_yearsSinceBuilt)
+        ]
+
+        for field_name, field_value in fields:
+            try:
+                entry[field_name] = float(field_value) if field_value else 0
+            except ValueError:
+                entry[field_name] = 0
+
+        # Add the entry to the data list if it has at least one valid field
+        if entry:
+            data.append(entry)
+
+    return pd.DataFrame(data)
+
+def most_common_owner_name(series):
+    # Find the most common value in the series
+    if len(series) > 0:
+        most_common_name = Counter(series).most_common(1)[0][0]
+        # Convert to CamelCase
+        words = most_common_name.split()
+        camel_case_name = ' '.join(word.capitalize() for word in words)
+        return camel_case_name
+    return ''
+
+def aggregate_data(df):
+    filtered_df = filter_owner_names(df)
+    grouped = filtered_df.groupby(['MailingFullStreetAddress', 'MailingZIP5'])
+    filtered = grouped.filter(lambda x: len(x) >= MIN_NUMBER_OF_PROPERTIES)
+    aggregated = filtered.groupby(['MailingFullStreetAddress', 'MailingZIP5']).agg(
+        MostCommonOwnerName=('OwnerNAME1FULL', most_common_owner_name),
+        NumProperties=('MailingFullStreetAddress', 'size'),
+        SumLivingAreaSqFt=('SumLivingAreaSqFt', 'sum'),
+        AverageLivingAreaSqFt=('SumLivingAreaSqFt', 'mean'),
+        SumLotSizeSqFt=('LotSizeSqFt', 'sum'),
+        AverageLotSizeSqFt=('LotSizeSqFt', 'mean'),
+        SumTotalValue=('TotalValue', 'sum'),
+        AverageTotalValue=('TotalValue', 'mean'),
+        AverageYearsSinceBuilt=('YearsSinceBuilt', 'mean'),
+    ).reset_index()
+
+    # Ensuring all numbers have 1 decimal place
+    for col in ['SumLivingAreaSqFt', 'AverageLivingAreaSqFt', 'AverageLotSizeSqFt', 
+                'AverageYearsSinceBuilt']:
+        aggregated[col] = aggregated[col].round(1)
+
+    # Sorting the DataFrame by 'NumProperties' in descending order
+    sorted_aggregated = aggregated.sort_values(by='NumProperties', ascending=False)
+    return sorted_aggregated
+
+def write_to_excel(df, client_name):
+    file_name = f"PropertyManagement - {client_name}.xlsx"
+    output_dir = "output"
+    df.to_excel(f"{output_dir}/{file_name}", index=False)
+
+def filter_owner_names(df):
+    keywords = ['city', 'state', 'commissioners', 'church']
+
+    """
+    Filters the DataFrame to exclude rows where OwnerNAME1FULL contains any of the specified keywords.
+    """
+    # Convert keywords to lowercase for case-insensitive comparison
+    keywords = [keyword.lower() for keyword in keywords]
+    # Filter out rows where OwnerNAME1FULL contains any of the keywords
+    return df[~df['OwnerNAME1FULL'].str.lower().str.contains('|'.join(keywords))]
+
+
+def property_management(properties_list, client_name):
+    df = create_dataframe(properties_list)
+    aggregated_data = aggregate_data(df)
+    write_to_excel(aggregated_data, client_name)
+    

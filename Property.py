@@ -136,20 +136,24 @@ class Property:
     def n_TotalValue(self):
         if self.CurrentAVMValue == "" and self.totalValue == "":
             self.n_totalValue = 0
+            print(1, self.n_totalValue)
             return self.n_totalValue
         try:
-            self.n_totalValue = int(max(float(self.CurrentAVMValue), float(self.totalValue)))
+            self.n_totalValue = int(self.totalValue)
             return self.n_totalValue
         except:
             try:
                 self.n_totalValue = float(self.CurrentAVMValue)
+                print(3, self.n_totalValue)
                 return self.n_totalValue
             except:
                 try:
                     self.n_totalValue = float(self.totalValue)
+                    print(4, self.n_totalValue)
                     return self.n_totalValue
                 except:
                     self.n_totalValue = 0
+                    print(5, self.n_totalValue)
                     return self.n_totalValue
     
     def n_LivingAreaSqFt(self):
