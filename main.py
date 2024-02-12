@@ -13,13 +13,13 @@ if __name__ == "__main__":
     export_cases(CLIENT_NAME, properties_list, RBB)
     create_tables(CLIENT_NAME, properties_list, RBB)
     
-    # RBB = True
-    # delete_csv_files(CLIENT_NAME)
-    # file_input = consolidate_csvs(CLIENT_NAME)
-    # process_csv_file(CLIENT_NAME, file_input)
-    # properties_list = load_properties_from_csv(CLIENT_NAME, file_input, RBB)    
-    # export_cases(CLIENT_NAME, properties_list, RBB)
-    # create_tables(CLIENT_NAME, properties_list, RBB)
+    RBB = True
+    delete_csv_files(CLIENT_NAME)
+    file_input = consolidate_csvs(CLIENT_NAME)
+    process_csv_file(CLIENT_NAME, file_input)
+    properties_list = load_properties_from_csv(CLIENT_NAME, file_input, RBB)    
+    export_cases(CLIENT_NAME, properties_list, RBB)
+    create_tables(CLIENT_NAME, properties_list, RBB)
  
 
 # if __name__ == "__main__2":
