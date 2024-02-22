@@ -17,6 +17,29 @@ from pathlib import Path
 from openpyxl import Workbook
 from collections import Counter
 
+def list_client_folders(base_path='input'):
+    """
+    Lists all directories (clients) inside the base_path, sorted alphabetically.
+    Returns a list of directory names.
+    """
+    client_folders = [name for name in os.listdir(base_path) if os.path.isdir(os.path.join(base_path, name))]
+    client_folders.sort()  # Sort the list alphabetically
+    return client_folders
+
+def get_client_selection(client_folders):
+    """
+    Asks the user to select a client from the list of client folders.
+    Returns the selected client name.
+    """
+    for i, client_name in enumerate(client_folders, start=1):
+        print(f"{i}. {client_name}")
+    while True:
+        selection = input("Please select a client by number: ").strip()
+        if selection.isdigit() and 1 <= int(selection) <= len(client_folders):
+            return client_folders[int(selection) - 1]
+        else:
+            print("Invalid selection. Please enter a number from the list.")
+
 def to_int(value):
     try:
         return int(value)
@@ -33,7 +56,7 @@ def capitalize_first(string):
     return string[0].upper() + string[1:].lower()
 
 def load_fips_from_csv(): 
-    df = pd.read_csv(FIPS_PATH, sep=';')
+    df = pd.read_csv(FIPS_PATH, sep=';', low_memory=False)
     fips_list = [Fips(row['FIPS Code'], capitalize_first(row['County Name']), row['Postal State'], row['Code']) for _, row in df.iterrows()]
     return fips_list
 
@@ -137,7 +160,7 @@ def load_properties_from_csv(CLIENT_NAME, file_path, RBB = False):
         return properties_list
     
     elif RBB:
-        find_unmatched_properties(file_path, zip_code_dict)
+        find_unmatched_properties(CLIENT_NAME, file_path, zip_code_dict)
         # Load the matching Excel data for comparison
         excel_file_path = f"input/{CLIENT_NAME}/client deals/{CLIENT_NAME} - client_deals.xlsx"
         excel_data = pd.read_excel(excel_file_path, dtype={'Property ZIP': str})
@@ -202,7 +225,7 @@ def load_properties_from_csv(CLIENT_NAME, file_path, RBB = False):
         return properties_list
 
 def load_docType_from_csv():
-    df = pd.read_csv(DOCTYPE_PATH, sep=';')
+    df = pd.read_csv(DOCTYPE_PATH, sep=';', low_memory=False)
     docType_list = [DocType(row['CODE'], capitalize_first(row['DESC']), row['Consider as sale?']) for _, row in df.iterrows()]
     return docType_list
 
@@ -1029,7 +1052,7 @@ def create_tables(CLIENT_NAME, properties_list, RBB = False):
     create_cases_table(CLIENT_NAME, file_path, RBB)    
     delete_csv_files(CLIENT_NAME)
 
-def find_unmatched_properties(large_file_path, zip_code_dict):
+def find_unmatched_properties(CLIENT_NAME, large_file_path, zip_code_dict):
     small_file_path = f"input/{CLIENT_NAME}/client deals/{CLIENT_NAME} - client_deals.xlsx"
     
     # Load the datasets
