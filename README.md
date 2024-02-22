@@ -44,11 +44,57 @@ The diagram should visually represent the workflow steps mentioned above, illust
 - **RBB Errors**: If an error occurs during RBB processing, check for correct file naming and ensure all required columns are present in the data.
 - **Memory Issues**: For large datasets, ensure your system has sufficient memory available, as the `low_memory=False` setting in pandas can increase memory usage.
 
-#### Support
+### Required Directory and File Structure
 
-For support, please create an issue in the GitHub repository or contact [Support Contact Information].
+To use this tool effectively, it's important to set up the required directory and file structure beforehand. Here’s a step-by-step guide to organizing your data:
+
+#### 1. Input Directory
+
+- **Location**: Create a folder named `input` at the root of the project directory.
+- **Purpose**: This folder should contain subfolders for each client you're working with.
+  
+#### 2. Client Folders
+
+- **Structure**: Inside the `input` directory, create a folder for each client. The name of the folder should be the client's name.
+- **Example**: If you have a client named "Acme Corp", you should have a folder path like `input/Acme Corp/`.
+- **Content**: Each client folder can contain raw data files for the counties you are analyzing.
+
+#### 3. Client Deals
+
+- **Structure**: Inside each client's folder, create a subfolder named `client deals`.
+- **Purpose**: This subfolder should contain the deals specific to the client.
+- **File Naming**: Add an Excel file with the name format `client name - client_deals.xlsx`. For example, for "Acme Corp", the file should be named `Acme Corp - client_deals.xlsx`.
+- **File Format**: The Excel file should follow the example structure for columns provided separately.
+
+#### 4. Outcome Directory
+
+- **Location**: Create a folder named `outcome` at the root of the project directory.
+- **Purpose**: This folder will store the outcome of the tool’s processing, such as reports and processed data files.
+
+#### Example Directory Structure
+
+```
+/project_root/
+│
+├── input/
+│   ├── Client Name 1/
+│   │   ├── county_data.csv
+│   │   └── client deals/
+│   │       └── Client Name 1 - client_deals.xlsx
+│   ├── Client Name 2/
+│   │   ├── county_data.csv
+│   │   └── client deals/
+│   │       └── Client Name 2 - client_deals.xlsx
+│   ...
+│
+└── outcome/
+```
+
+Ensure this structure is in place before running the tool to avoid errors and ensure smooth operation.
 
 ---
+
+Including this detailed structure in your README will guide users in setting up their environment correctly, minimizing setup errors and confusion about where to place and how to name their files and directories.
 
 ### Creating the Diagram
 
