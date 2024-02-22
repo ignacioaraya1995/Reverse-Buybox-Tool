@@ -3,9 +3,6 @@ input/.DS_Store
 input/Andrew/.DS_Store
 input/Andrew/04013.csv
 input/Andrew/Andrew - consolidated.csv
-input/Cailleo/.DS_Store
-input/Cailleo/55009.csv
-input/Cailleo/client deals/Cailleo - client_deals.xlsx
 input/Easy Key Homes/.DS_Store
 input/Easy Key Homes/29189.csv
 input/Freedom/.DS_Store
@@ -194,11 +191,8 @@ input/Test/51730.csv
 input/Test/51830.csv
 input/Test/53061.csv
 output/.DS_Store
-output/MRBB_results - Cailleo.xlsx
 output/MRBB_results - HomeLink.xlsx
 output/MRBB_results - Kris Lindahl Real Estate.xlsx
 output/MRBB_results - Test 3.xlsx
-output/RBB_results - CAilleo.xlsx
 output/RBB_results - Sell My Home Carolina.xlsx
-output/unmatched client_deals - CAilleo.xlsx
 .DS_Store
