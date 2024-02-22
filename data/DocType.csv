@@ -1,0 +1,113 @@
+﻿CODE;DESC;Consider as sale?
+1;Assignment of Sub Agreement of Sale (Hawaii);Y
+2;Assignment of Sub Lease (Hawaii);Y
+3;Assignment of Commercial Lease (Hawaii);Y
+4;Administrator’s Deed;Y
+5;Affidavit;N
+6;Agreement of Sale;Y
+7;Assignment of Agreement of Sale (Hawaii);Y
+8;"Assignment Deed (or Condo Deed if Land Use = ""CND"")";Y
+9;Affidavit of Trust or Trust Agreement (Los Angeles);N
+10;Assignment of Sub Commercial Lease (Hawaii);Y
+11;"Beneficiary Deed (Buyer ID = ""BE"")";N
+12;Bargain and Sale Deed;Y
+13;Commissioners Assignment of Lease (Hawaii);Y
+14;Condominium Deed;Y
+15;Cash Sale Deed;Y
+16;Commercial Lease (Hawaii);Y
+17;Commissioner’s Deed - North Carolina in probate-related transfers. In Hawaii foreclosure-related transfers.;Y
+18;Cancellation of Agreement of Sale (Hawaii);Y
+19;Conservator’s Deed;Y
+20;Corporation Deed;Y
+21;Correction Deed;N
+22;Contract of Sale;Y
+23;Certificate of Transfer;N
+24;Deed of Distribution;N
+25;Declaration;Y
+26;Transfer on Death Deed;N
+27;Deed;Y
+28;Deed of Guardian;Y
+29;Affidavit of Death of Joint Tenant;N
+30;Deed in Lieu of Foreclosure;Y
+31;Distress Sale;Y
+32;Exchange;Y
+33;Executor’s Deed;Y
+34;Foreclosure;Y
+35;Fiduciary Deed;Y
+36;Grant Deed;Y
+37;Gift Deed;N
+38;Ground Lease;Y
+39;Individual Deed;Y
+40;Intrafamily Transfer & Dissolution;N
+41;Joint Tenancy Deed;Y
+42;Legal Action/Court Order;Y
+43;Leasehold Conv. With Agreement of Sale (Fee Purchase) (Hawaii);Y
+44;Land Contract;Y
+45;Lease (Hawaii);Y
+46;Assignment of Lease (Leasehold Sale) (Hawaii);Y
+47;Leasehold Conv. with an Agreement of Sale (Hawaii);Y
+48;Land Court (Massachusetts);Y
+49;Limited Warranty Deed;Y
+50;Special Master Deed;Y
+51;Other ;Y
+52;Public Action - Common in Florida (Clerks Tax Deed or Tax Deeds or property sold for taxes.;Y
+53;Partnership Deed;Y
+54;Personal Representatives Deed;Y
+55;Quit Claim Deed;N
+56;Satisfaction of Land Contract (WI) or Release/Satisfaction of Agreement of Sale (Fee Property) (HI);Y
+57;Receiver’s Deed;Y
+58;Redemption Deed;Y
+59;Referee’s Deed - transfer pursuant to a foreclosure sale (NY) ;Y
+60;Release/Satisfaction of Agreement of Sale (Leasehold) (Hawaii);Y
+61;Re-recorded Document ;N
+62;Sub Agreement of Sale (Hawaii);Y
+63;Sub Commercial Lease (Hawaii);Y
+64;Sheriff’s Deed;Y
+65;Sub Lease (Hawaii);Y
+66;Affidavit Death of Trustee/Successor Trustee (Los Angeles);N
+67;Survivorship Deed;N
+68;Special Warranty Deed;Y
+69;Trustee’s Deed (Certificate of Title);Y
+70;Vendor’s Lien;Y
+71;Warranty Deed;Y
+72;Transaction History Record;Y
+73;Foreclosure Cancelled;N
+74;Certificate of Purchase/Certificate of Foreclosure Recorded;Y
+75;Order Rescheduling Foreclosure Sale Date;Y
+76;Foreclosure Judgment Entered;N
+77;Notice of Default;N
+78;PreForeclosure Newly Filed Complaint;N
+79;Notice of Lis Pendens;N
+80;Notice of Rescission;N
+81;Notice of Foreclosure Sale;Y
+82;Notice of Trustee Sale;Y
+83;Order of Dismissal/ Cancellation/ Release of Lis Pendens;N
+84;Re-recorded Notice of Default;N
+85;Re-recorded Final Judgment of Foreclosure;N
+86;Re-recorded Notice of Lis Pendens;N
+87;Re-Recorded Order of Dismissal;N
+88;Re-Recorded Notice of Rescission;N
+89;NF/NS updated with Sale Information (Rescheduled);Y
+90;Re-recorded Notice of Trustee's Sale;Y
+91;PreForeclosure Sold;Y
+92;Re-recorded Notice of  Sale;Y
+93;Stand Alone Mortgage ;N
+94;Assignment of Mortgage;N
+95;Affidavit of Lost (or Missing) Assignment;N
+96;Correction Assignment;Y
+97;Miscellaneous Assignment. Partial interest assignment;N
+98;Master Assignment. Single document for assignment of several mortgages;N
+99;Rerecorded Assignment;Y
+A;Substitution of Trustee and Assignment of Deed of Trust;N
+B;Full Release WITH a legal description;N
+C;Multiple Release. One document release several mortgages;N
+D;Partial Release WITH a legal description;N
+E;Partial Release with NO legal description;N
+F;Full Release with NO legal description;N
+G;Substitution of Trustee and Full Reconveyance;N
+H;Mortgage;N
+K;Assessor Sales History;Y
+DT;Affidavit of Death of Life Tenant;N
+L;Divorce/Dissolution of Marriage Transfer;N
+M;Affidavit of Death of Life Tenant;N
+N;REO Sale (REO Out);Y

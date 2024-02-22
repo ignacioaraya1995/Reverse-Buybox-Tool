@@ -1,24 +1,204 @@
 
-*.csv
-input/Phil Buys Houses Fast/client deals/.DS_Store
-input/Phil Buys Houses Fast/.DS_Store
-*.xlsx
-input/RiverfrontHB/.DS_Store
-input/SBD Housing/.DS_Store
-input/Sell Now Wisconsin/.DS_Store
-input/Sell Quick Tampa/.DS_Store
-input/Simple Cash Offers/.DS_Store
-input/Simple Cash Offers/client deals/.DS_Store
-input/Simple Quarters/.DS_Store
-input/Simple Quarters/client deals/.DS_Store
-input/TN HomeBuyers/.DS_Store
-input/Rapid Fire Home Buyers/client deals/.DS_Store
-input/Rapid Fire Home Buyers/.DS_Store
-input/LHB/.DS_Store
-input/GG Homes/.DS_Store
-input/Cava/.DS_Store
-input/Beachworks/.DS_Store
-input/Alex Buy Vegas/.DS_Store
 input/.DS_Store
+input/Andrew/.DS_Store
+input/Andrew/04013.csv
+input/Andrew/Andrew - consolidated.csv
+input/Cailleo/.DS_Store
+input/Cailleo/55009.csv
+input/Cailleo/client deals/Cailleo - client_deals.xlsx
+input/Easy Key Homes/.DS_Store
+input/Easy Key Homes/29189.csv
+input/Freedom/.DS_Store
+input/Freedom/12019.csv
+input/Freedom/12031.csv
+input/Freedom/client deals/Freedom - client_deals.xlsx
+input/HomeLink/29225.csv
+input/Keystone/.DS_Store
+input/Keystone/37025.csv
+input/Keystone/37035.csv
+input/Keystone/37057.csv
+input/Keystone/37059.csv
+input/Keystone/37067.csv
+input/Keystone/37069.csv
+input/Keystone/37071.csv
+input/Keystone/37081.csv
+input/Keystone/37097.csv
+input/Keystone/37109.csv
+input/Keystone/37119.csv
+input/Keystone/37151.csv
+input/Keystone/37157.csv
+input/Keystone/37159.csv
+input/Keystone/37169.csv
+input/Keystone/37171.csv
+input/Keystone/37179.csv
+input/Keystone/37193.csv
+input/Keystone/37197.csv
+input/Keystone/client deals/.DS_Store
+input/Keystone/client deals/Keystone - client_deals.xlsx
+input/Kris Lindahl Real Estate/.DS_Store
+input/Kris Lindahl Real Estate/27003.csv
+input/Kris Lindahl Real Estate/27025.csv
+input/Kris Lindahl Real Estate/27037.csv
+input/Kris Lindahl Real Estate/27053.csv
+input/Kris Lindahl Real Estate/27059.csv
+input/Kris Lindahl Real Estate/27109.csv
+input/Kris Lindahl Real Estate/27123.csv
+input/Kris Lindahl Real Estate/27131.csv
+input/Kris Lindahl Real Estate/27139.csv
+input/Kris Lindahl Real Estate/27141.csv
+input/Kris Lindahl Real Estate/27145.csv
+input/Kris Lindahl Real Estate/27163.csv
+input/Kris Lindahl Real Estate/27171.csv
+input/Kris Lindahl Real Estate/55109.csv
+input/Kris Lindahl Real Estate/client deals/Kris Lindahl Real Estate - client_deals.xlsx
+input/Kris Lindahl Real Estate/Kris Lindahl Real Estate - consolidated.csv
+input/NH Home Buyers/.DS_Store
+input/NH Home Buyers/12061.csv
+input/NH Home Buyers/12085.csv
+input/NH Home Buyers/12111.csv
+input/NH Home Buyers/client deals/NH Home Buyers - client_deals.xlsx
+input/Noble Homes/.DS_Store
+input/Noble Homes/04005.csv
+input/Noble Homes/04007.csv
+input/Noble Homes/04013.csv
+input/Noble Homes/04017.csv
+input/Noble Homes/04025.csv
+input/Noble Homes/client deals/Noble Homes - client_deals.xlsx
+input/Pinnnacle Investments/.DS_Store
+input/Pinnnacle Investments/06019.csv
+input/Pinnnacle Investments/06029.csv
+input/Pinnnacle Investments/06031.csv
+input/Pinnnacle Investments/06039.csv
+input/Pinnnacle Investments/06047.csv
+input/Pinnnacle Investments/06099.csv
+input/Pinnnacle Investments/06107.csv
+input/Pinnnacle Investments/client deals/.DS_Store
+input/Pinnnacle Investments/client deals/Pinnnacle Investments - client_deals.xlsx
+input/Test 2/.DS_Store
+input/Test 2/01029.csv
+input/Test 2/01067.csv
+input/Test 2/01069.csv
+input/Test 2/01077.csv
+input/Test 2/01079.csv
+input/Test 2/01081.csv
+input/Test 2/01083.csv
+input/Test 2/01101.csv
+input/Test 2/01103.csv
+input/Test 2/01113.csv
+input/Test 2/01127.csv
+input/Test 2/05007.csv
+input/Test 2/05019.csv
+input/Test 2/05079.csv
+input/Test 2/05141.csv
+input/Test 2/08035.csv
+input/Test 2/13035.csv
+input/Test 2/13091.csv
+input/Test 2/13115.csv
+input/Test 2/13123.csv
+input/Test 2/13129.csv
+input/Test 2/13159.csv
+input/Test 2/13307.csv
+input/Test 2/17027.csv
+input/Test 2/17089.csv
+input/Test 2/18061.csv
+input/Test 2/18147.csv
+input/Test 2/20045.csv
+input/Test 2/20103.csv
+input/Test 2/21021.csv
+input/Test 2/21181.csv
+input/Test 2/28049.csv
+input/Test 2/39135.csv
+input/Test 2/42079 2.csv
+input/Test 2/42079.csv
+input/Test 2/46083.csv
+input/Test 2/49033.csv
+input/Test 2/51145.csv
+input/Test 2/51678.csv
+input/Test 2/51730.csv
+input/Test 2/51830.csv
+input/Test 3/.DS_Store
+input/Test 3/01029.csv
+input/Test 3/01067.csv
+input/Test 3/Test 3 - consolidated.csv
+input/Test/.DS_Store
+input/Test/01069.csv
+input/Test/01077.csv
+input/Test/01081.csv
+input/Test/01083.csv
+input/Test/01113.csv
+input/Test/01127.csv
+input/Test/05007.csv
+input/Test/05023.csv
+input/Test/05045.csv
+input/Test/05131.csv
+input/Test/05141.csv
+input/Test/05143.csv
+input/Test/05145.csv
+input/Test/09003.csv
+input/Test/09009.csv
+input/Test/13035.csv
+input/Test/13059.csv
+input/Test/13123.csv
+input/Test/13129.csv
+input/Test/13159.csv
+input/Test/13227.csv
+input/Test/20045.csv
+input/Test/20103.csv
+input/Test/21021.csv
+input/Test/21029.csv
+input/Test/21049.csv
+input/Test/21071.csv
+input/Test/21093.csv
+input/Test/21097.csv
+input/Test/21103.csv
+input/Test/21173.csv
+input/Test/21179.csv
+input/Test/21181.csv
+input/Test/21185.csv
+input/Test/21211.csv
+input/Test/21215.csv
+input/Test/24027.csv
+input/Test/28049.csv
+input/Test/29109.csv
+input/Test/29225.csv
+input/Test/31053.csv
+input/Test/36027.csv
+input/Test/36071.csv
+input/Test/36079.csv
+input/Test/36105.csv
+input/Test/36119.csv
+input/Test/37141.csv
+input/Test/39027.csv
+input/Test/39109.csv
+input/Test/39135.csv
+input/Test/42025.csv
+input/Test/42079.csv
+input/Test/42103.csv
+input/Test/42127.csv
+input/Test/46083.csv
+input/Test/46099.csv
+input/Test/47105.csv
+input/Test/48061.csv
+input/Test/48141.csv
+input/Test/48215.csv
+input/Test/49025.csv
+input/Test/49029.csv
+input/Test/49033.csv
+input/Test/51013.csv
+input/Test/51033.csv
+input/Test/51093.csv
+input/Test/51145.csv
+input/Test/51678.csv
+input/Test/51680.csv
+input/Test/51730.csv
+input/Test/51830.csv
+input/Test/53061.csv
 output/.DS_Store
+output/MRBB_results - Cailleo.xlsx
+output/MRBB_results - HomeLink.xlsx
+output/MRBB_results - Kris Lindahl Real Estate.xlsx
+output/MRBB_results - Test 3.xlsx
+output/RBB_results - CAilleo.xlsx
+output/RBB_results - Sell My Home Carolina.xlsx
+output/unmatched client_deals - CAilleo.xlsx
 .DS_Store
