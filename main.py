@@ -1,32 +1,33 @@
 from utils import *
 from vars import *
 
-RBB = False # If you want to make a MRBB, then RBB should be set to False, else RBB should be set to True.
-
 if __name__ == "__main__":
-    print("Starting: ", CLIENT_NAME)
-    delete_csv_files(CLIENT_NAME)
-    file_input = consolidate_csvs(CLIENT_NAME)
-    process_csv_file(CLIENT_NAME, file_input)
-    properties_list = load_properties_from_csv(CLIENT_NAME, file_input, RBB)    
-    # count_failed_criteria(properties_list)
-    export_cases(CLIENT_NAME, properties_list, RBB)
-    create_tables(CLIENT_NAME, properties_list, RBB)
-    
-    RBB = True
-    delete_csv_files(CLIENT_NAME)
-    file_input = consolidate_csvs(CLIENT_NAME)
-    process_csv_file(CLIENT_NAME, file_input)
-    properties_list = load_properties_from_csv(CLIENT_NAME, file_input, RBB)    
-    export_cases(CLIENT_NAME, properties_list, RBB)
-    create_tables(CLIENT_NAME, properties_list, RBB)
- 
+    # Ask the user for the client name
+    client_name = input("Please enter the client name (it should match the client folder name): ")
+    CLIENT_NAME = client_name.strip()  # .strip() removes any leading/trailing whitespace
 
-# if __name__ == "__main__2":
-#     print("Starting: ", CLIENT_NAME)
-#     delete_csv_files(CLIENT_NAME)
-#     file_input = consolidate_csvs(CLIENT_NAME)
-#     process_csv_file(CLIENT_NAME, file_input, False)
-#     properties_list = load_properties_from_csv(CLIENT_NAME, file_input, False)      
-#     print("Starting: ", CLIENT_NAME)    
-#     property_management(properties_list, CLIENT_NAME)
+    # Ask the user if they want to run only the Market Reverse Buybox (MRBB) or both MRBB and Reverse Buybox (RBB)
+    process_choice = input("Do you want to run only the Market Reverse Buybox (MRBB) or both MRBB and Reverse Buybox (RBB)? Enter 'MRBB' for only MRBB or 'Both' for both: ").strip().lower()
+
+    # Initialize to run MRBB first
+    RBB = False
+    print(f"Starting the Market Reverse Buybox (MRBB) for {CLIENT_NAME}")
+
+    # Common process steps
+    def process_steps(CLIENT_NAME, RBB):
+        delete_csv_files(CLIENT_NAME)
+        file_input = consolidate_csvs(CLIENT_NAME)
+        process_csv_file(CLIENT_NAME, file_input)
+        properties_list = load_properties_from_csv(CLIENT_NAME, file_input, RBB)    
+        export_cases(CLIENT_NAME, properties_list, RBB)
+        create_tables(CLIENT_NAME, properties_list, RBB)
+
+    # Run the MRBB
+    process_steps(CLIENT_NAME, RBB)
+
+    # Check if the user wants to run both
+    if process_choice == 'both':
+        # Now run RBB
+        RBB = True
+        print(f"Starting the Reverse Buybox (RBB) for {CLIENT_NAME}")
+        process_steps(CLIENT_NAME, RBB)

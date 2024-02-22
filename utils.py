@@ -71,7 +71,7 @@ def consolidate_csvs(CLIENT_NAME):
 
 def process_csv_file(CLIENT_NAME, file_path, filter = True):
     # Load the CSV file into a DataFrame
-    df = pd.read_csv(file_path)
+    df = pd.read_csv(file_path, low_memory=False)
 
     # 1. Select specific columns from the dataframe
     selected_columns = [
@@ -469,7 +469,7 @@ def export_cases(CLIENT_NAME, properties_list, RBB = False):
     exported_deals = len(df[df['Deal'] == 1])
     print("Exported deals: {} from {} properties".format(exported_deals, exported_properties))
 
-def read_cases(RBB):
+def read_cases(CLIENT_NAME, RBB):
     if RBB == False:
         file_prefix = "output/MRBB_cases - " + CLIENT_NAME + "_"
     if RBB == True:
@@ -479,7 +479,7 @@ def read_cases(RBB):
     concatenated_df = pd.concat(df_from_each_file, ignore_index=True)
     return concatenated_df
 
-def create_cases_table(file_path, RBB = False):
+def create_cases_table(CLIENT_NAME, file_path, RBB = False):
     # Commented list
     all_columns = ["buildDate", "case_1", "case_2", "case_3",
         "FIPS", "LotSizeSqFt", "LTV",
@@ -522,7 +522,7 @@ def create_cases_table(file_path, RBB = False):
     official_columns.extend(missing_columns)
     
     # Read the Excel file into a DataFrame
-    df = read_cases(RBB)
+    df = read_cases(CLIENT_NAME, RBB)
     
     # Filter the DataFrame to only include specified columns
     df_filtered = df[official_columns].copy()  # Make a copy to avoid SettingWithCopyWarning
@@ -931,9 +931,9 @@ def create_lot_size_table(properties_list, file_path):
         
     return df
 
-def create_deal_summary(file_path, RBB = False):
+def create_deal_summary(CLIENT_NAME, file_path, RBB = False):
     # Load the excel file
-    df = read_cases(RBB)
+    df = read_cases(CLIENT_NAME, RBB)
     
     # Filtering helper function
     def filter_avg_values(series):
@@ -1020,13 +1020,13 @@ def create_tables(CLIENT_NAME, properties_list, RBB = False):
         file_path   = "output/RBB_results - "  + CLIENT_NAME + ".xlsx"
     if RBB == False:
         file_path   = "output/MRBB_results - "  + CLIENT_NAME + ".xlsx"
-    create_deal_summary(file_path, RBB)    
+    create_deal_summary(CLIENT_NAME, file_path, RBB)    
     create_zipcode_table(properties_list, file_path)   
     create_year_county_table(properties_list, file_path)   
     create_total_value_table(properties_list, file_path)   
     create_living_area_table(properties_list, file_path)    
     create_lot_size_table(properties_list, file_path)    
-    create_cases_table(file_path, RBB)    
+    create_cases_table(CLIENT_NAME, file_path, RBB)    
     delete_csv_files(CLIENT_NAME)
 
 def find_unmatched_properties(large_file_path, zip_code_dict):
@@ -1161,7 +1161,6 @@ def filter_owner_names(df):
     keywords = [keyword.lower() for keyword in keywords]
     # Filter out rows where OwnerNAME1FULL contains any of the keywords
     return df[~df['OwnerNAME1FULL'].str.lower().str.contains('|'.join(keywords))]
-
 
 def property_management(properties_list, client_name):
     df = create_dataframe(properties_list)
