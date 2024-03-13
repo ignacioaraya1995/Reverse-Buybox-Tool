@@ -93,6 +93,12 @@ class Property:
         self.Absentee = Absentee
         self.fips_list = fips_list
         self.docType_list = docType_list
+        self.criteria_failures = {
+            'base': [],
+            'case_1': [],
+            'case_2': [],
+            'case_3': []
+        }
         self.n_County()
         self.n_TotalValue()
         self.n_LivingAreaSqFt()
@@ -115,6 +121,8 @@ class Property:
         self.case_1 = self.Case_1()
         self.case_2 = self.Case_2()
         self.case_3 = self.Case_3()
+
+
 
     def __str__(self):
         table = ""
@@ -392,120 +400,144 @@ class Property:
         similarity_score = fuzz.ratio(self.CurrentSaleSeller1FullName.upper().strip(), self.PrevSaleBuyer1FullName.upper().strip())
         return similarity_score > 85  # You can tune the threshold as needed
 
+    def convert_to_int(self, value, default=-1):
+        """Intenta convertir un valor a int, devuelve un valor predeterminado si falla."""
+        # Si el valor es una cadena, intentar convertirlo tras comprobar si es numérico
+        if isinstance(value, str):
+            try:
+                # strip() elimina espacios en blanco y isdigit() verifica si todos los caracteres son dígitos
+                # Pero primero verificamos si es una cadena que representa un flotante
+                if value.strip().replace('.', '', 1).isdigit() or value.strip().lstrip('-').replace('.', '', 1).isdigit():
+                    return int(float(value))
+                else:
+                    return default
+            except ValueError:
+                return default
+        # Si el valor ya es un número (int o float), convertir directamente a int
+        elif isinstance(value, (int, float)):
+            return int(value)
+        else:
+            return default
+
+
     # MISSING: Mailing address remains unchanged between owners
     def Base_criteria(self):
-        # PrevSaleBuyer is equal to CurrentSaleSeller
-        # PrevSalesPrice is greater than $10,000
         names_are_similar = self.are_names_similar()
         price_condition = int(self.n_prevSalesPriceValue) >= 10000
+        failures = []
 
-        if not names_are_similar or not price_condition:
+        if not names_are_similar:
+            failures.append("names_are_not_similar")
+        if not price_condition:
+            failures.append("price_below_10000")
+
+        if failures:
+            self.criteria_failures['base'].extend(failures)
             return False
         else:
             return True
             
     # CASE 1: Double Close
     def Case_1(self):
+        failures = []
         if not self.Base_criteria():
-            return False
+            failures.append("base_criteria_failed")
         
-        # Months since PrevSale <= 12 and VALID
-        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y":
+        # Convertir valores relevantes a enteros
+        n_monthsSincePrevSale = self.convert_to_int(self.n_monthsSincePrevSale)
+        n_monthsSinceCurrentSale = self.convert_to_int(self.n_monthsSinceCurrentSale)
+        n_yearsSinceBuilt = self.convert_to_int(self.n_yearsSinceBuilt)
+        n_diffSalesPrice = self.convert_to_int(self.n_diffSalesPrice)
+        n_prevDaysOwnership = self.convert_to_int(self.n_prevDaysOwnership)
+        n_currentSalesPriceValue = self.convert_to_int(self.n_currentSalesPriceValue)
+        totalValue = self.convert_to_int(self.totalValue)
+
+        # Actualizar las condiciones para usar los valores convertidos
+        criteria_checks = [
+            ("prev_sale_conditions_not_met", lambda: n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y"),
+            ("current_sale_conditions_not_met", lambda: n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y"),
+            ("years_since_built_not_specified_or_less_or_equal_3", lambda: n_yearsSinceBuilt <= 3),
+            ("diff_in_sales_price_not_specified_or_out_of_bounds", lambda: n_diffSalesPrice <= 10000 or n_diffSalesPrice > n_currentSalesPriceValue * 0.4),
+            ("prev_days_ownership_out_of_bounds_0_3", lambda: not (0 <= n_prevDaysOwnership <= 3)),
+            ("current_sales_price_too_low", lambda: n_currentSalesPriceValue <= 0.10 * totalValue or n_currentSalesPriceValue <= 20000)
+        ]
+
+        for failure_msg, check in criteria_checks:
+            if check():
+                failures.append(failure_msg)
+
+        if failures:
+            self.criteria_failures['case_1'].extend(failures)
             return False
-        
-        # Months since CurrentSale <= 12 and VALID
-        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y":
-            return False
-        
-        # Years since built > 3
-        if self.n_yearsSinceBuilt == "":
-            return False
-        if not self.n_yearsSinceBuilt > 3:
-            return False
-        
-        # Difference in Sales Price: Minimum of $10,000 and maximum in relation to the estimated property value (40% of Last sale Price)
-        if self.n_diffSalesPrice == "":
-            return False
-        if self.n_diffSalesPrice <= 10000 or self.n_diffSalesPrice > self.n_currentSalesPriceValue * 0.4:
-            return False
-        
-        # Previous Days of Ownership between 0 and 3
-        if not (self.n_prevDaysOwnership >= 0 and self.n_prevDaysOwnership <= 3):
-            return False
-        
-        # If the current sales price is less than or equal to both 10% of total value and $20,000
-        if self.n_currentSalesPriceValue <= 0.10 * self.totalValue or self.n_currentSalesPriceValue <= 20000:
-            return False
-        
-        return True  
+        else:
+            return True
 
     # CASE 2: Wholetail
     def Case_2(self):
+        failures = []
         if not self.Base_criteria():
-            return False
+            failures.append("base_criteria_failed")
         
-        # Months since PrevSale <= 12 and VALID
-        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y":
-            return False
+        # Convertir valores relevantes a enteros
+        n_monthsSincePrevSale = self.convert_to_int(self.n_monthsSincePrevSale)
+        n_monthsSinceCurrentSale = self.convert_to_int(self.n_monthsSinceCurrentSale)
+        n_yearsSinceBuilt = self.convert_to_int(self.n_yearsSinceBuilt)
+        n_diffSalesPrice = self.convert_to_int(self.n_diffSalesPrice)
+        n_prevDaysOwnership = self.convert_to_int(self.n_prevDaysOwnership)
+        n_currentSalesPriceValue = self.convert_to_int(self.n_currentSalesPriceValue)
+        totalValue = self.convert_to_int(self.totalValue)
 
-        # Months since CurrentSale <= 12 and VALID
-        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y":
-            return False
+        # Actualizar las condiciones para usar los valores convertidos
+        criteria_checks = [
+            ("prev_sale_conditions_not_met", lambda: n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y"),
+            ("current_sale_conditions_not_met", lambda: n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y"),
+            ("years_since_built_not_specified_or_less_or_equal_3", lambda: n_yearsSinceBuilt <= 3),
+            ("diff_in_sales_price_not_specified_or_out_of_bounds", lambda: n_diffSalesPrice < 10000 or n_diffSalesPrice > n_currentSalesPriceValue * 0.5),
+            ("prev_days_ownership_out_of_bounds_4_60", lambda: not (4 <= n_prevDaysOwnership <= 60)),
+            ("current_sales_price_too_low", lambda: n_currentSalesPriceValue <= 0.10 * totalValue or n_currentSalesPriceValue <= 20000)
+        ]
 
-        # Years since built > 3
-        if self.n_yearsSinceBuilt == "":
-            return False
-        if not self.n_yearsSinceBuilt > 3:
-            return False
+        for failure_msg, check in criteria_checks:
+            if check():
+                failures.append(failure_msg)
 
-        # Difference in Sales Price: Minimum of $10,000 and maximum in relation to the estimated property value (40% of Last sale Price)
-        if self.n_diffSalesPrice == "":
+        if failures:
+            self.criteria_failures['case_2'].extend(failures)
             return False
-        if self.n_diffSalesPrice < 10000 or self.n_diffSalesPrice > self.n_currentSalesPriceValue * 0.5:
-            return False
-
-        # Previous Days of Ownership between 4 and 60
-        if not (self.n_prevDaysOwnership >= 4 and self.n_prevDaysOwnership <= 60):
-            return False
-
-        # If the current sales price is less than or equal to both 10% of total value and $20,000
-        if self.n_currentSalesPriceValue <= 0.10 * self.totalValue or self.n_currentSalesPriceValue <= 20000:
-            return False
-
-        return True
+        else:
+            return True
     
     # CASE 3: Fix & FLip
     def Case_3(self):
+        failures = []
         if not self.Base_criteria():
-            return False
-        
-        # Months since PrevSale <= 12 and VALID
-        if self.n_monthsSincePrevSale == "" or self.n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y":
-            return False
+            failures.append("base_criteria_failed")
 
-        # Months since CurrentSale <= 12 and VALID
-        if self.n_monthsSinceCurrentSale == "" or self.n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y":
-            return False
+        # Convertir valores relevantes a enteros
+        n_monthsSincePrevSale = self.convert_to_int(self.n_monthsSincePrevSale)
+        n_monthsSinceCurrentSale = self.convert_to_int(self.n_monthsSinceCurrentSale)
+        n_yearsSinceBuilt = self.convert_to_int(self.n_yearsSinceBuilt)
+        n_diffSalesPrice = self.convert_to_int(self.n_diffSalesPrice)
+        n_prevDaysOwnership = self.convert_to_int(self.n_prevDaysOwnership)
+        n_currentSalesPriceValue = self.convert_to_int(self.n_currentSalesPriceValue)
+        totalValue = self.convert_to_int(self.totalValue)
 
-        # Years since built > 5
-        if self.n_yearsSinceBuilt == "":
-            return False
-        if not self.n_yearsSinceBuilt > 5:
-            return False
+        # Actualizar las condiciones para usar los valores convertidos
+        criteria_checks = [
+            ("prev_sale_conditions_not_met", lambda: n_monthsSincePrevSale > MONTHS or self.n_prevSaleValid != "Y"),
+            ("current_sale_conditions_not_met", lambda: n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y"),
+            ("years_since_built_not_specified_or_less_or_equal_5", lambda: n_yearsSinceBuilt <= 5),
+            ("diff_in_sales_price_not_specified_or_out_of_bounds", lambda: n_diffSalesPrice <= 10000 or n_diffSalesPrice > n_currentSalesPriceValue * 0.6),
+            ("prev_days_ownership_out_of_bounds_61_365", lambda: not (61 <= n_prevDaysOwnership <= 365*1.5)),
+            ("current_sales_price_too_low", lambda: n_currentSalesPriceValue <= 0.10 * totalValue or n_currentSalesPriceValue <= 20000)
+        ]
 
-        # Difference in Sales Price: Minimum of $10,000 and maximum in relation to the est0imated property value (40% of Last sale Price)
-        if self.n_diffSalesPrice == "":
-            return False
-        if self.n_diffSalesPrice <= 10000 or self.n_diffSalesPrice > self.n_currentSalesPriceValue * 0.6:
-            return False
+        for failure_msg, check in criteria_checks:
+            if check():
+                failures.append(failure_msg)
 
-        # Previous Days of Ownership between 4 and 60
-        if not (self.n_prevDaysOwnership >= 61 and self.n_prevDaysOwnership <= 365*1.5):
+        if failures:
+            self.criteria_failures['case_3'].extend(failures)
             return False
-
-        # If the current sales price is less than or equal to both 10% of total value and $20,000
-        if self.n_currentSalesPriceValue <= 0.10 * self.totalValue or self.n_currentSalesPriceValue <= 20000:
-            return False
-
-        return True
-    
+        else:
+            return True

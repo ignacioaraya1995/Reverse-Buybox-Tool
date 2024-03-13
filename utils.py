@@ -156,6 +156,35 @@ def load_properties_from_csv(CLIENT_NAME, file_path, RBB = False):
                 # Now row does not contain None as a key
                 prop = Property(fips_list, docType_list, **row)
                 properties_list.append(prop)
+        
+        # Recolectar resultados de chequeos de criterios de todas las propiedades
+        criteria_failures = {'base': [], 'case_1': [], 'case_2': [], 'case_3': []}
+
+        print("Total number of properties: ", len(properties_list))
+
+        for prop in properties_list:
+            for case, failures in prop.criteria_failures.items():
+                criteria_failures[case].extend(failures)
+
+        # Asumiendo que ya has recolectado y consolidado los resultados de chequeos de criterios en criteria_failures
+
+        for case, failures in criteria_failures.items():
+            failure_counts = defaultdict(int)
+            for failure in failures:
+                failure_counts[failure] += 1
+            
+            # Crear y configurar PrettyTable
+            table = PrettyTable()
+            table.field_names = ["Failure Reason", "Count"]
+            table.align["Failure Reason"] = "l"
+            table.align["Count"] = "r"
+            
+            for failure, count in failure_counts.items():
+                table.add_row([failure, count])
+            
+            # Imprimir la tabla para cada caso
+            print(f"Results for {case.upper()}:")
+            print(table)
 
         return properties_list
     
