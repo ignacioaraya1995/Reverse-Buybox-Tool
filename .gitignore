@@ -199,3 +199,6 @@ output/RBB_results - Sell My Home Carolina.xlsx
 *.pyc
 output/unmatched client_deals - Kris Lindahl Real Estate.xlsx
 output/RBB_results - Kris Lindahl Real Estate.xlsx
+*.xlsx
+*.csv
+*.xlsx
