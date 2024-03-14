@@ -3,8 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from utils import *
 from fuzzywuzzy import fuzz
-
-MONTHS = 18
+from vars import MONTHS
 
 # Defining the Property class with all the attributes
 class Property:
@@ -528,7 +527,7 @@ class Property:
             ("current_sale_conditions_not_met", lambda: n_monthsSinceCurrentSale > MONTHS or self.n_prevSaleValid != "Y"),
             ("years_since_built_not_specified_or_less_or_equal_5", lambda: n_yearsSinceBuilt <= 5),
             ("diff_in_sales_price_not_specified_or_out_of_bounds", lambda: n_diffSalesPrice <= 10000 or n_diffSalesPrice > n_currentSalesPriceValue * 0.6),
-            ("prev_days_ownership_out_of_bounds_61_365", lambda: not (61 <= n_prevDaysOwnership <= 365*1.5)),
+            ("prev_days_ownership_out_of_bounds_61_365", lambda: not (61 <= n_prevDaysOwnership <= 540)),
             ("current_sales_price_too_low", lambda: n_currentSalesPriceValue <= 0.10 * totalValue or n_currentSalesPriceValue <= 20000)
         ]
 
