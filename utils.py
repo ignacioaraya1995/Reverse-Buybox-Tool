@@ -160,7 +160,7 @@ def load_properties_from_csv(CLIENT_NAME, file_path, RBB = False):
         # Recolectar resultados de chequeos de criterios de todas las propiedades
         criteria_failures = {'base': [], 'case_1': [], 'case_2': [], 'case_3': []}
 
-        print("Total number of properties: ", len(properties_list))
+        print("Total number of properties: ", "{:,}".format(len(properties_list)).replace(",", "."))
 
         for prop in properties_list:
             for case, failures in prop.criteria_failures.items():
@@ -170,17 +170,22 @@ def load_properties_from_csv(CLIENT_NAME, file_path, RBB = False):
 
         for case, failures in criteria_failures.items():
             failure_counts = defaultdict(int)
+            total_failures = 0
+
             for failure in failures:
                 failure_counts[failure] += 1
+                total_failures += 1
             
             # Crear y configurar PrettyTable
             table = PrettyTable()
-            table.field_names = ["Failure Reason", "Count"]
+            table.field_names = ["Failure Reason", "Count", "% of Total"]
             table.align["Failure Reason"] = "l"
             table.align["Count"] = "r"
+            table.align["% of Total"] = "r"
             
             for failure, count in failure_counts.items():
-                table.add_row([failure, count])
+                percentage = (count / len(properties_list)) * 100
+                table.add_row([failure, "{:,}".format(count).replace(",", "."), "{:.2f}%".format(percentage)])
             
             # Imprimir la tabla para cada caso
             print(f"Results for {case.upper()}:")
