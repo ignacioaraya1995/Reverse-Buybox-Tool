@@ -12,6 +12,24 @@ csv_files = glob.glob(os.path.join(folder_path, '*.csv'))
 # Initialize a list to store the averages
 averages_list = []
 
+def get_fips_name(file_basename, csv_path='data/FIPS.csv'):
+    # Extract the FIPS code from the basename, assuming format "FIPS.csv"
+    fips_code = file_basename.replace('.csv', '')
+    
+    # Load the CSV file
+    fips_df = pd.read_csv(csv_path, sep=';')
+    
+    # Find the row with the matching FIPS Code
+    match = fips_df.loc[fips_df['FIPS Code'] == fips_code, 'County Name']
+    
+    # Check if the search returned any results
+    if match.empty:
+        # Handle the case where no matching FIPS code was found
+        return None  # Or, you could return a default value or raise a custom error
+    else:
+        # Return the County Name
+        return match.values[0]
+
 # Define the function to extract year from buildDate
 def extract_year(date_str):
     if date_str in ['Unknown', '01-01-70', None, '']:
@@ -75,9 +93,9 @@ for file_path in csv_files:
     df['SumLivingAreaSqFt'] = pd.to_numeric(df['SumLivingAreaSqFt'], errors='coerce')
     
     # Apply filter extremes function
-    # df['LotSizeSqFt'] = filter_extremes(df['LotSizeSqFt'])
-    # df['totalValue'] = filter_extremes(df['totalValue'])
-    # df['SumLivingAreaSqFt'] = filter_extremes(df['SumLivingAreaSqFt'])
+    df['LotSizeSqFt'] = filter_extremes(df['LotSizeSqFt'])
+    df['totalValue'] = filter_extremes(df['totalValue'])
+    df['SumLivingAreaSqFt'] = filter_extremes(df['SumLivingAreaSqFt'])
     
     # Convert 'buildDate' to 'buildYear'
     df['buildYear'] = df['buildDate'].apply(extract_year)
@@ -90,26 +108,13 @@ for file_path in csv_files:
     
     # Append the averages as a tuple to the list
     averages_list.append((
-        os.path.basename(file_path),
+        get_fips_name(os.path.basename(file_path)),
         avg_lot_size_sq_ft,
         avg_total_value,
         avg_sum_living_area_sq_ft,
         avg_build_year
     ))
 
-    # Apply the classification function to the 'totalValue' column
-    df['PriceRange'] = df['totalValue'].apply(lambda x: classify_into_range(x, price_ranges))
-
-    # Count the occurrences of each price range
-    price_range_counts = df['PriceRange'].value_counts().sort_index()
-
-    # Convert the counts to a DataFrame for better readability and append to a list (if needed for each file)
-    price_range_counts_df = pd.DataFrame(price_range_counts).reset_index()
-    price_range_counts_df.columns = ['Price Range', 'Number of Properties']
-
-    # Display or save the price range counts for this file
-    print(f"Price Range Counts for {os.path.basename(file_path)}:")
-    print(price_range_counts_df)
 
 # Create a DataFrame from the list of averages
 averages_df = pd.DataFrame(averages_list, columns=['FileName', 'AvgLotSizeSqFt', 'AvgTotalValue', 'AvgSumLivingAreaSqFt', 'AvgBuildYear'])
