@@ -4,7 +4,7 @@ import glob
 from datetime import datetime
 
 # Specify the folder path correctly
-folder_path = 'input/GLO'
+folder_path = 'input/Beachworks'
 
 # List all CSV files in the folder
 csv_files = glob.glob(os.path.join(folder_path, '*.csv'))
@@ -43,7 +43,7 @@ def extract_year(date_str):
 # Define a function to filter extremes
 def filter_extremes(column):
     lower_bound = column.quantile(0.1)
-    upper_bound = column.quantile(0.9)
+    upper_bound = column.quantile(0.8)
     return column[(column >= lower_bound) & (column <= upper_bound) & (column != 0)]
 
 # Function to classify each value into a price range
@@ -108,7 +108,7 @@ for file_path in csv_files:
     
     # Append the averages as a tuple to the list
     averages_list.append((
-        get_fips_name(os.path.basename(file_path)),
+        os.path.basename(file_path),
         avg_lot_size_sq_ft,
         avg_total_value,
         avg_sum_living_area_sq_ft,

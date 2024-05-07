@@ -84,7 +84,7 @@ class Property:
         self.Use_Type = Use_Type
         self.saleDate = saleDate
         try:
-            self.totalValue = int(totalValue)
+            self.totalValue = int(float(totalValue))
         except ValueError:
             self.totalValue = 0
         self.buildDate = buildDate
