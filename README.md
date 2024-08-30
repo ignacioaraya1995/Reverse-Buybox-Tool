@@ -2,6 +2,8 @@
 
 #### What This Tool Does
 
+sk = A3-3CF6Y7-XTRZXH-D8YB3-PPRP6-2M28M-6YQFA
+
 This tool helps you analyze real estate data by letting you choose between two types of analyses: Market Reverse Buybox (MRBB) and Reverse Buybox (RBB). You can pick a specific client's data and decide if you want to analyze just MRBB, or both MRBB and RBB. The tool then processes the data, giving you detailed reports and insights.
 
 #### Getting Started
